@@ -4,9 +4,31 @@ services:
     container_name: proxy
     image: golang:1.12.8
     volumes: 
-      - ./service/proxy/:/go/src/proxy
-    working_dir: /go/src/proxy
+      - ./services/proxy:/app/src/proxy
+    working_dir: /app/src/proxy
     command: >
       sh -c "go run main.go"
     ports:
-      - '443:443'
+      - 443:443
+  auth:
+    container_name: auth
+    image: golang:1.12.8
+    environment:
+      - PORT=3000
+    volumes: 
+      - ./services/auth:/app/src/auth
+    working_dir: /app/src/auth
+    command: >
+      sh -c "go run main.go"
+    ports:
+      - 3000:3000
+  user:
+    container_name: user
+    image: golang:1.12.8
+    environment:
+      - PORT=3000
+    volumes: 
+      - ./services/user:/app/src/user
+    working_dir: /app/src/user
+    command: >
+      sh -c "go run main.go"
